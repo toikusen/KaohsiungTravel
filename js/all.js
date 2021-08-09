@@ -11,8 +11,7 @@ xhr.onload = function(){
     var selectArea = document.querySelector('.selectArea');
     var placeName = document.querySelector('.content')
     var pagination = document.querySelector('.pagination');
-
-
+    var btn = document.querySelectorAll('.btn');
 
     // 當前頁
     var pageNum = 1;
@@ -41,6 +40,13 @@ xhr.onload = function(){
         select.appendChild(areaOption);
         // select.innerHTML = `<option>${area}</optiion>`
     }
+
+    //熱門景點選單
+    for(i =0;i<btn.length;i++){
+        console.log(btn.length)
+        btn[i].addEventListener('click',updateArea,false)
+        btn[i].addEventListener('click',updateContent,false)
+      };
 
     var selectValue = '';
     //下拉選單更改地區名稱
@@ -132,20 +138,20 @@ xhr.onload = function(){
     function countPageNum(num) {
         if(num > contentNum) {
           pageLeng = Math.ceil( num / contentNum );
-          var prevPage = `<li class="page-item" ><a class="page-link" href="#">Previous</a></li>`;
-          var nextPage =`<li class="page-item"><a class="page-link" href="#">Next</a></li>`;
+          var prevPage = `<li class="page-item" ><a class="page-link" href="#">< Previous</a></li>`;
+          var nextPage =`<li class="page-item"><a class="page-link" href="#">Next ></a></li>`;
           var str = '';
           for(var i = 1; i<= pageLeng; i++) {
             if(i == pageNum) {
-            str += `<li class="page-item active"><a class="page-link" href="#">${i}</a>`;
+            str += `<li><a class="active" href="#">${i}</a>`;
             } else {
-            str += `<li class="page-item "><a class="page-link" href="#">${i}</a>`;
+            str += `<li><a href="#">${i}</a>`;
             }
           } 
            pagination.innerHTML = prevPage + str + nextPage;
       
         } else {
-           str = `<li class="page-item active" data-page="0"><a class="page-link" href="#" data-page="0">1</a>`;
+           str = `<li><a class="active" href="#">1</a>`;
              pagination.innerHTML = str ;
         }
       
@@ -155,13 +161,13 @@ xhr.onload = function(){
         e.preventDefault();
         // var currentPage = e.target.textContent;
         // console.log(currentPage);
-        if(e.target.textContent == 'Next') {
+        if(e.target.textContent == 'Next >') {
             if(pageNum == pageLeng) { 
               pageNum = pageLeng // 頁面到最後一頁時候 pageNum = pageLeng
             } else {
               pageNum ++; // 尚未到最後頁面則按下 NEXT 進到下一頁
             }
-        } else if(e.target.textContent == 'Previous') {
+        } else if(e.target.textContent == '< Previous') {
           if(pageNum == 1) {
             pageNum = 1;
           } else {
