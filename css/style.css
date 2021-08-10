@@ -143,8 +143,8 @@ body {
     position: relative;
     background-color: white;
     float: left;
-    width: 730px;
-    height: 650px;
+    width: 570px;
+    height: 620px;
     margin: 50px 0px 50px 50px;
     box-shadow: 0px 0px 2px 1px rgb(192, 192, 192);
     text-shadow:0 2px 4px rgba(0,0,0,0.3);
@@ -154,7 +154,15 @@ body {
     padding-top: 300px;
     padding-left: 30px;
     padding-bottom: 15px;
-    font-size: 50px;
+    font-size: 30px;
+    color: white;
+}
+
+.attractions li h2{
+    position:absolute;
+    right: 15px;
+    bottom: 20px;
+    font-size: 15px;
     color: white;
 }
 
@@ -175,8 +183,8 @@ body {
 
 .attractions li .info p{
     padding: 8px;
-    font-size: 30px;
-    line-height: 45px;
+    font-size: 20px;
+    line-height: 40px;
     color: black;
 }
 
@@ -184,7 +192,7 @@ body {
     position: absolute;
     right: 30px;
     bottom: 30px;
-    font-size: 30px;
+    font-size: 20px;
     color: black;
 }
 

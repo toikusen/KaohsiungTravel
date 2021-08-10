@@ -72,6 +72,7 @@ xhr.onload = function(){
 
         //景點資料
         var nameList = [];
+        var zoneList = [];
         var imgList = [];
         var timeList = [];
         var addressList = [];
@@ -96,6 +97,7 @@ xhr.onload = function(){
             if (selectValue == Data.result.records[i].Zone){
   
                 nameList.push(Data.result.records[i].Name);
+                zoneList.push(Data.result.records[i].Zone);
                 imgList.push(Data.result.records[i].Picture1);
                 timeList.push(Data.result.records[i].Opentime);
                 addressList.push(Data.result.records[i].Add);
@@ -113,7 +115,8 @@ xhr.onload = function(){
                 <ul>
                     <li>
                         <div class="picture" style="background:url('${imgList[n]}')">
-                            <h3>${nameList[n]}</h3>   
+                            <h3>${nameList[n]}</h3>
+                            <h2>${zoneList[n]}</h2>   
                         </div>
                         <div class="info">                          
                             <p><img src="./picture/icons_clock.png" alt=""> ${timeList[n]}</p>       
