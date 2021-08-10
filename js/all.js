@@ -12,6 +12,7 @@ xhr.onload = function(){
     var placeName = document.querySelector('.content')
     var pagination = document.querySelector('.pagination');
     var btn = document.querySelectorAll('.btn');
+    var placeDetail = document.querySelector('.detail .placeDetail');
 
     // 當前頁
     var pageNum = 1;
@@ -42,11 +43,10 @@ xhr.onload = function(){
     }
 
     //熱門景點選單
-    for(i =0;i<btn.length;i++){
-        console.log(btn.length)
+    for(var i =0;i<btn.length;i++){
         btn[i].addEventListener('click',updateArea,false)
         btn[i].addEventListener('click',updateContent,false)
-      };
+    };
 
     var selectValue = '';
     //下拉選單更改地區名稱
@@ -113,7 +113,7 @@ xhr.onload = function(){
             `
             <div class="attractions">         
                 <ul>
-                    <li>
+                    <li class="li">
                         <div class="picture" style="background:url('${imgList[n]}')">
                             <h3>${nameList[n]}</h3>
                             <h2>${zoneList[n]}</h2>   
@@ -133,6 +133,42 @@ xhr.onload = function(){
         }
 
         placeName.innerHTML = strContent;
+
+        //抓取目前瀏覽器的高度與寬度
+        var hei = $(document).height();
+		var wid = $(document).width();
+        //Detail的DOM必須要放在updateContent裡面，才能重新抓取不同的li
+        var li = document.querySelectorAll('.li');
+        function detail(e){
+            for (var x=0; x<dataLen; x++){
+                var selectName = e.path[0].innerHTML;
+                if (selectName == Data.result.records[x].Name){  
+                    strDetail = 
+                    `
+                    <h1>詳細資訊：</h1>
+                    <hr>
+                    <h2>景點介紹</h2>
+                    <br>
+                    <p>${Data.result.records[x].Description}</p>
+                    `;
+
+                    var top = ($(window).height() - $("#detail").height())/2;   
+                    var left = ($(window).width() - $("#detail").width())/2;   
+                    var scrollTop = $(document).scrollTop();   
+                    var scrollLeft = $(document).scrollLeft();    
+                    $("#detail").css( { position : 'absolute', 'top' : top + scrollTop, left : left + scrollLeft } ).show();     
+                }
+            }
+            placeDetail.innerHTML = strDetail;
+        }
+
+        for(var i =0;i<li.length;i++){
+            li[i].addEventListener('click',detail,false)
+        };
+
+        $("#close").click(function(){			
+            $("#detail").hide();			
+        });
     }
 
     select.addEventListener('change',updateContent,false);
@@ -162,8 +198,6 @@ xhr.onload = function(){
       
       function changePage(e){
         e.preventDefault();
-        // var currentPage = e.target.textContent;
-        // console.log(currentPage);
         if(e.target.textContent == 'Next >') {
             if(pageNum == pageLeng) { 
               pageNum = pageLeng // 頁面到最後一頁時候 pageNum = pageLeng

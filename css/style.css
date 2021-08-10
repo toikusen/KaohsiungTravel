@@ -257,3 +257,45 @@ footer h2{
     background-size: 100%;
 }
 
+
+/*被彈出的div視窗*/
+#detail{
+    z-index: 100;
+    background: rgb(255, 220, 155);
+	border: 1px black solid;
+	border-radius: 10px;
+	width: 700px;
+	height: 700px;
+/*讓其浮在最上面*/
+	position: absolute;
+    display: none;
+	}
+    		
+#detail #close{
+    width: 20px;
+    height: 25px;
+    margin-left: 670px;
+    margin-top: 10px;
+    font-size: 25px;
+}
+
+#detail #placeDetail{
+    margin-left: 50px;
+    width: 600px;
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+
+#detail #placeDetail h1{
+    font-size: 40px;
+    font-weight:bold;
+}
+
+#detail #placeDetail h2{
+    font-size: 30px;
+}
+
+#detail #placeDetail p{
+    font-size: 25px;
+    line-height: 30px;
+}
