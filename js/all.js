@@ -138,20 +138,20 @@ xhr.onload = function(){
     function countPageNum(num) {
         if(num > contentNum) {
           pageLeng = Math.ceil( num / contentNum );
-          var prevPage = `<li class="page-item" ><a class="page-link" href="#">< Previous</a></li>`;
-          var nextPage =`<li class="page-item"><a class="page-link" href="#">Next ></a></li>`;
+          var prevPage = `<li><a href="#br">< Previous</a></li>`;
+          var nextPage =`<li><a href="#br">Next ></a></li>`;
           var str = '';
           for(var i = 1; i<= pageLeng; i++) {
             if(i == pageNum) {
-            str += `<li><a class="active" href="#">${i}</a>`;
+            str += `<li><a class="active" href="#br">${i}</a></li>`;
             } else {
-            str += `<li><a href="#">${i}</a>`;
+            str += `<li><a href="#br">${i}</a></li>`;
             }
           } 
            pagination.innerHTML = prevPage + str + nextPage;
       
         } else {
-           str = `<li><a class="active" href="#">1</a>`;
+           str = `<li><a class="active" href="#br">1</a></li>`;
              pagination.innerHTML = str ;
         }
       
