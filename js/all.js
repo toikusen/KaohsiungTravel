@@ -7,21 +7,19 @@ xhr.onload = function(){
     var dataLen = Data.result.records.length;
 
     //DOM
-    var select = document.querySelector('.select');
-    var selectArea = document.querySelector('.selectArea');
-    var placeName = document.querySelector('.content')
-    var pagination = document.querySelector('.pagination');
-    var btn = document.querySelectorAll('.btn');
+    var selectDropDownList = document.querySelector('.select');
+    var selectAreaTitle = document.querySelector('.selectArea');
+    var palaceContent = document.querySelector('.content');
     var placeDetail = document.querySelector('.detail .placeDetail');
+    var pagination = document.querySelector('.pagination');
+    var placeButton = document.querySelectorAll('.btn');
 
     // 當前頁
     var pageNum = 1;
     // 每一個分頁顯示的數量 -> 6 筆
-    var contentNum = 6;
+    var CONTENT_NUM = 6;
     // 頁碼數量
     let pageLeng = 0;
-    var selectAreaLen = [];
-    var selectLen = [];
 
     //生成地區的陣列
     //areaList陣列必須放在迴圈外面，不然每做一次迴圈就會產生一個新的陣列
@@ -34,37 +32,40 @@ xhr.onload = function(){
     //areaList因為有重複值，所以用Set儲存成唯一值
     var area = Array.from(new Set(areaList));
     //將新的陣列用DOM放入select裡面
-    newAreaLen = area.length; 
+    newAreaLen = area.length;
     for (var i=0; i<newAreaLen; i++){
         var areaOption = document.createElement('option');
         areaOption.textContent = area[i];
-        select.appendChild(areaOption);
+        selectDropDownList.appendChild(areaOption);
         // select.innerHTML = `<option>${area}</optiion>`
     }
 
-    //熱門景點選單
-    for(var i =0;i<btn.length;i++){
-        btn[i].addEventListener('click',updateArea,false)
-        btn[i].addEventListener('click',updateContent,false)
+    //熱門景點按鈕
+    for(var i =0;i<placeButton.length;i++){
+        placeButton[i].addEventListener('click',updateArea,false)
+        placeButton[i].addEventListener('click',updateContent,false)
     };
 
     var selectValue = '';
-    //下拉選單更改地區名稱
-    function updateArea(e){
-        pageNum = 1; // 回到第一頁
-        selectValue =  e.target.value;       
-        selectAreaLen = [];
-        selectLen = [];
+    function selectZone(){    
         for (var i=0; i<dataLen; i++){
             if (selectValue == Data.result.records[i].Zone){
-                strArea = `<h2>${Data.result.records[i].Zone}</h2>`;
-                selectAreaLen.push(Data.result.records[i].Zone); 
+                strArea = `<h2>${selectValue}</h2>`;
             }
         }
-        selectArea.innerHTML = strArea;
-        selectLen = selectAreaLen;
+
     }
-    select.addEventListener('change',updateArea,false);
+
+    
+    
+    //下拉選單更改地區名稱
+    function updateArea(e){
+        pageNum = 1; // 改地區之後要回到第一頁
+        selectValue =  e.target.value;       
+        selectZone(e);
+        selectAreaTitle.innerHTML = strArea;
+    }
+    selectDropDownList.addEventListener('change',updateArea,false);
 
 
     //下拉選單更改地區內容
@@ -80,18 +81,7 @@ xhr.onload = function(){
         var ticketList = [];
         var strContent = '';
 
-        // 選取開始的陣列位置 -> 頁碼乘以每頁顯示數量
-        var start = pageNum * contentNum;
-        var areaLen = selectLen.length;
-        // 頁數
-        countPageNum(areaLen);
-        // 如果長度大於 start，以 start 作為迴圈停止條件
-        if(areaLen > start) {
-            areaLen = start;
-        } else {
-            areaLen = selectLen.length;
-        }
-    	// 以 start - 每頁顯示數量，作為開始條件
+
         for (var i=0; i<dataLen; i++){
 
             if (selectValue == Data.result.records[i].Zone){
@@ -107,8 +97,24 @@ xhr.onload = function(){
             }
 
         }
+
+
+        // 選取開始的陣列位置 -> 頁碼乘以每頁顯示數量
+        var pageContentNum = pageNum * CONTENT_NUM;
+        var start = pageContentNum-CONTENT_NUM
+        var end = zoneList.length;
+        // 頁數
+        countPageNum(end);
+        // 如果長度大於 start，以 pageContentNum 作為迴圈停止條件
+        if(end > pageContentNum) {
+            end = pageContentNum;
+        } else {
+            end = zoneList.length;
+        }
+        
+
         var n =0;
-        for(n = start-contentNum;n<areaLen;n++){
+        for(n = start;n<end;n++){
             strContent +=
             `
             <div class="attractions">         
@@ -132,7 +138,7 @@ xhr.onload = function(){
             `                    
         }
 
-        placeName.innerHTML = strContent;
+        palaceContent.innerHTML = strContent;
 
         //抓取目前瀏覽器的高度與寬度
         var hei = $(document).height();
@@ -171,26 +177,26 @@ xhr.onload = function(){
         });
     }
 
-    select.addEventListener('change',updateContent,false);
+    selectDropDownList.addEventListener('change',updateContent,false);
 
 
     function countPageNum(num) {
-        if(num > contentNum) {
-          pageLeng = Math.ceil( num / contentNum );
-          var prevPage = `<li><a href="#br">< Previous</a></li>`;
-          var nextPage =`<li><a href="#br">Next ></a></li>`;
+        if(num > CONTENT_NUM) {
+          pageLeng = Math.ceil( num / CONTENT_NUM );
+          var prevPage = `<li><a>< Previous</a></li>`;
+          var nextPage =`<li><a>Next ></a></li>`;
           var str = '';
           for(var i = 1; i<= pageLeng; i++) {
             if(i == pageNum) {
-            str += `<li><a class="active" href="#br">${i}</a></li>`;
+            str += `<li><a class="active">${i}</a></li>`;
             } else {
-            str += `<li><a href="#br">${i}</a></li>`;
+            str += `<li><a>${i}</a></li>`;
             }
           } 
            pagination.innerHTML = prevPage + str + nextPage;
       
         } else {
-           str = `<li><a class="active" href="#br">1</a></li>`;
+           str = `<li><a class="active">1</a></li>`;
              pagination.innerHTML = str ;
         }
       
