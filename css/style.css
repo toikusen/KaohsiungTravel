@@ -103,7 +103,7 @@ body {
     font-weight: 400;
     font-size: 40px;
 }
-.banner .hot .btn{
+.banner .hot .placeButton{
     font-size: 20px;
     background: linear-gradient(#7a68af,#5c4f84);
     border: none;
@@ -112,14 +112,14 @@ body {
     padding: 8px 32px;
 }
 
-.br{
+.toContent{
     margin: 200px 50px 0px 50px;
     border-top: 1px dashed rgb(89, 218, 153);
     position: relative;
     text-align: center;
 }
 
-.br img{
+.toContent img{
     margin-top: -25px;
 }
 
@@ -279,23 +279,23 @@ footer h2{
     font-size: 25px;
 }
 
-#detail #placeDetail{
+#detail #detailMessage{
     margin-left: 50px;
     width: 600px;
     margin-top: 50px;
     margin-bottom: 100px;
 }
 
-#detail #placeDetail h1{
+#detail #detailMessage h1{
     font-size: 40px;
     font-weight:bold;
 }
 
-#detail #placeDetail h2{
+#detail #detailMessage h2{
     font-size: 30px;
 }
 
-#detail #placeDetail p{
+#detail #detailMessage p{
     font-size: 25px;
     line-height: 30px;
 }
