@@ -79,6 +79,7 @@ xhr.onload = function(){
         updateArea(e);
         updateContent(e);
     }
+    selectDropDownList.addEventListener('change',updateData,false);
     
     //下拉選單更改地區名稱
     function updateArea(e){
@@ -87,7 +88,6 @@ xhr.onload = function(){
         selectZone();
         selectAreaTitle.innerHTML = strArea;
     }
-    selectDropDownList.addEventListener('change',updateArea,false);
 
     //下拉選單更改地區內容
     function updateContent(e){  
@@ -131,14 +131,13 @@ xhr.onload = function(){
                 </ul>\
             </div>'                    
         }
-
         contentMessage.innerHTML = strContent;
 
         //Detail的DOM必須要放在updateContent裡面，才能重新抓取不同的li
         var li = document.querySelectorAll('.li');     
         function detail(e){
             for (var x=0; x<dataLen; x++){
-                var selectName = e.path[0].innerHTML;
+                var selectName = e.srcElement.innerHTML;          
                 if (selectName == Data.result.records[x].Name){  
                     strDetail = 
                     '\
@@ -169,29 +168,28 @@ xhr.onload = function(){
             $("#detail").hide();			
         });
 
-        function changePage(e){
-            if(e.target.textContent == 'Next >') {
-                if(pageNum == pageLeng) { 
-                    pageNum = pageLeng //頁面到最後一頁時候 pageNum = pageLeng
-                }else{
-                    pageNum ++; //尚未到最後頁面則按下 NEXT 進到下一頁
-                }
-            }else if(e.target.textContent == '< Previous') {
-                if(pageNum == 1) {
-                    pageNum = 1; //頁面到第一頁時候 pageNum = 1
-                }else{
-                    pageNum --; //尚未到第一頁則按下 Previous 進到前一頁
-                }
-            }else {
-                pageNum = parseInt(e.target.textContent);
-            }       
-            updateContent();
-          }
-          pagination.addEventListener('click', changePage,false);
-
     }
 
-    selectDropDownList.addEventListener('change',updateContent,false);
+    //換頁方法
+    function changePage(e){
+        if(e.target.textContent == 'Next >') {
+            if(pageNum == pageLeng) { 
+                pageNum = pageLeng //頁面到最後一頁時候 pageNum = pageLeng
+            }else{
+                pageNum ++; //尚未到最後頁面則按下 NEXT 進到下一頁
+            }
+        }else if(e.target.textContent == '< Previous') {
+            if(pageNum == 1) {
+                pageNum = 1; //頁面到第一頁時候 pageNum = 1
+            }else{
+                pageNum --; //尚未到第一頁則按下 Previous 進到前一頁
+            }
+        }else {
+            pageNum = parseInt(e.target.textContent);
+        }       
+        updateContent();
+      }
+      pagination.addEventListener('click', changePage,false);
 
     //生成頁面按鈕的方法
     function countPageNum(num) {
@@ -208,7 +206,6 @@ xhr.onload = function(){
             }
           } 
            pagination.innerHTML = prevPage + page + nextPage;
-      
         } else {
             page = '<li><a class="active">1</a></li>';
              pagination.innerHTML = page ;
