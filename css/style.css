@@ -234,12 +234,12 @@ footer h1{
 }
 
 footer h2{
-    color: rgb(255, 196, 0);
+    color: white;
     font-size: 20px;
 }
 
 footer h3{
-    color: black;
+    color: rgb(255, 196, 0);
     font-size: 20px;
 }
 
