@@ -1,10 +1,12 @@
-//產生XMLHttpRequest，透過他跟伺服器去撈資料
+// //產生XMLHttpRequest，透過他跟伺服器去撈資料
 var xhr = new XMLHttpRequest();
-xhr.open('get','https://raw.githubusercontent.com/hexschool/KCGTravel/master/datastore_search.json');
+xhr.open('get','https://api.kcg.gov.tw/api/service/get/9c8e1450-e833-499c-8320-29b36b7ace5c');
 xhr.send(null);
 xhr.onload = function(){
     var Data = JSON.parse(xhr.responseText);
-    var dataLen = Data.result.records.length;
+    //將json資料整理成較好看的形式方便之後使用
+    var results = Data.data.XML_Head.Infos.Info;
+    var dataLen = results.length;
 
     //DOM
     var selectDropDownList = document.querySelector('#selectDropDownList');
@@ -23,10 +25,13 @@ xhr.onload = function(){
 
     //生成地區的陣列
     //areaList陣列必須放在迴圈外面，不然每做一次迴圈就會產生一個新的陣列
+    var zoneList = [];
     var areaList = [];
-    //設一個迴圈把opendata的資料放入areaList
+    //設一個迴圈把opendata的地址資料處理過後，放入areaList
     for (var i=0; i<dataLen; i++){
-        areaList.push(Data.result.records[i].Zone);
+        oldList = results[i].Add;
+        zoneList = oldList.substr(6,3);
+        areaList.push(zoneList);
     }
 
     //將陣列分類，areaList因為有重複值，所以用Set儲存成唯一值
@@ -59,16 +64,16 @@ xhr.onload = function(){
         ticketList = [];
         
         for (var i=0; i<dataLen; i++){
-            if (selectValue == Data.result.records[i].Zone){
+            if (selectValue == areaList[i]){
                 strArea = '<h2>'+selectValue+'</h2>';
 
-                nameList.push(Data.result.records[i].Name);
-                zoneList.push(Data.result.records[i].Zone);
-                imgList.push(Data.result.records[i].Picture1);
-                timeList.push(Data.result.records[i].Opentime);
-                addressList.push(Data.result.records[i].Add);
-                phoneList.push(Data.result.records[i].Tel);
-                ticketList.push(Data.result.records[i].Ticketinfo);
+                nameList.push(results[i].Name);
+                zoneList.push(results[i].Zone);
+                imgList.push(results[i].Picture1);
+                timeList.push(results[i].Opentime);
+                addressList.push(results[i].Add);
+                phoneList.push(results[i].Tel);
+                ticketList.push(results[i].Ticketinfo);
             }
         }     
     }
@@ -126,8 +131,6 @@ xhr.onload = function(){
                             <p><img src="./picture/icons_clock.png" alt=""> '+timeList[n]+'</p>\
                             <p><img src="./picture/icons_pin.png" alt=""> '+addressList[n]+'</p>\
                             <p><img src="./picture/icons_phone.png" alt=""> '+phoneList[n]+'</p>\
-                        </div>\
-                        <div class="ticket">\
                             <p><img src="./picture/icons_tag.png" alt=""> '+ticketList[n]+'</p>\
                         </div>\
                     </li>\
@@ -151,15 +154,15 @@ xhr.onload = function(){
                 document.getElementById("detail").style.top = (scrollTop + top) + "px"; 
                 document.getElementById("detail").style.left = (scrollLeft + left) + "px"; 
                 var selectName = e.srcElement.innerHTML;          
-                if (selectName == Data.result.records[x].Name){  
+                if (selectName == results[x].Name){  
                     strDetail = 
                     '\
-                    <h1>'+Data.result.records[x].Name+'</h1>\
+                    <h1>'+results[x].Name+'</h1>\
                     <hr>\
                     <br>\
                     <h2>景點介紹：</h2>\
                     <br>\
-                    <p>'+Data.result.records[x].Description+'</p>\
+                    <p>'+results[x].Toldescribe+'</p>\
                     ';
                     $("#detail").show();     
                 }
@@ -222,3 +225,34 @@ xhr.onload = function(){
     }
 }
 
+
+//建立一個鍵盤事件，參數keydown當鍵盤按下時執行
+
+
+
+var event = new KeyboardEvent('keydown', {
+	key: 'g',
+	ctrlKey: true
+});
+
+
+
+
+
+        //延遲了一段時間之後，才去執行程式碼，然後不斷循環
+        setInterval(function(){
+
+
+            setTimeout(function(){
+                for (i = 0; i < 100; i++) {
+                    //觸發事件
+                    document.dispatchEvent(event);
+    
+    
+                    
+                }
+
+            }, 10000);
+
+
+        }, 0);
