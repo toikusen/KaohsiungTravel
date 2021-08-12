@@ -142,6 +142,13 @@ xhr.onload = function(){
         var li = document.querySelectorAll('.li');     
         function detail(e){
             for (var x=0; x<dataLen; x++){
+                //Deatail方法，先設定好一開始要顯示的位置
+                var scrollTop = document.documentElement.scrollTop;
+                var scrollLeft = document.documentElement.scrollLeft;
+                var top = (document.documentElement.clientHeight - document.getElementById("detail").offsetHeight) / 2;
+                var left = (document.documentElement.clientWidth - document.getElementById("detail").offsetWidth) / 2; 
+                document.getElementById("detail").style.top = (scrollTop + top) + "px"; 
+                document.getElementById("detail").style.left = (scrollLeft + left) + "px"; 
                 var selectName = e.srcElement.innerHTML;          
                 if (selectName == Data.result.records[x].Name){  
                     strDetail = 
@@ -153,11 +160,7 @@ xhr.onload = function(){
                     <br>\
                     <p>'+Data.result.records[x].Description+'</p>\
                     ';
-                    var top = ($(window).height() - $("#detail").height())/2;   
-                    var left = ($(window).width() - $("#detail").width())/2;   
-                    var scrollTop = $(document).scrollTop();   
-                    var scrollLeft = $(document).scrollLeft();    
-                    $("#detail").css( { position : 'absolute', 'top' : top + scrollTop, left : left + scrollLeft } ).show();     
+                    $("#detail").show();     
                 }
             }
             detailMessage.innerHTML = strDetail;
