@@ -7,7 +7,7 @@ xhr.onload = function(){
     var dataLen = Data.result.records.length;
 
     //DOM
-    var selectDropDownList = document.querySelector('#select');
+    var selectDropDownList = document.querySelector('#selectDropDownList');
     var selectAreaTitle = document.querySelector('#selectArea');
     var contentMessage = document.querySelector('#content');
     var detailMessage = document.querySelector('#detailMessage');
@@ -36,17 +36,15 @@ xhr.onload = function(){
     });
     //將新的陣列用DOM放入select裡面
     newAreaLen = area.length;
+    strAreaList = '';
     for (var i=0; i<newAreaLen; i++){
-        var areaOption = document.createElement('option');
-        areaOption.textContent = area[i];
-        selectDropDownList.appendChild(areaOption);
-        // select.innerHTML = `<option>${area}</optiion>`
+        // var areaOption = document.createElement('option');
+        // areaOption.textContent = area[i];
+        // selectDropDownList.appendChild(areaOption);
+        defaultSelect = '<option disabled selected>--請選擇地區--</option>'
+        strAreaList += '<option value="'+area[i]+'">'+area[i]+'</optiion>'
     }
-
-    //熱門景點按鈕
-    for(var i =0;i<placeButton.length;i++){
-        placeButton[i].addEventListener('click',updateData,false)
-    };
+    selectDropDownList.innerHTML = defaultSelect + strAreaList;
 
     //用來判斷點選的地區，並整理該地區的資料
     var selectValue = '';
@@ -80,6 +78,12 @@ xhr.onload = function(){
         updateContent(e);
     }
     selectDropDownList.addEventListener('change',updateData,false);
+
+    //迴圈對應每個按鈕，點選按鈕更改地區
+    for(var i =0;i<placeButton.length;i++){
+        placeButton[i].addEventListener('click',updateData,false);
+    };
+
     
     //下拉選單更改地區名稱
     function updateArea(e){
@@ -87,6 +91,7 @@ xhr.onload = function(){
         selectValue =  e.target.value;       
         selectZone();
         selectAreaTitle.innerHTML = strArea;
+        selectDropDownList.value = selectValue;
     }
 
     //下拉選單更改地區內容
