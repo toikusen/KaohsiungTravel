@@ -104,8 +104,6 @@ xhr.onload = function(){
         var start = pageContentNum-CONTENT_NUM;
         //每頁最後一筆資料起始值設為該地區景點數量
         var end = zoneList.length;
-        //計算分頁數量的方法
-        countPageNum(end);
         //如果該地區景點數量大於幾頁會顯示幾筆資料， 那就將該頁顯示的資料數設為最後一個要顯示的資料
         //小於則將該地區景點數就設為最後一個資料
         if(end > pageContentNum) {
@@ -137,6 +135,9 @@ xhr.onload = function(){
             </div>'                    
         }
         contentMessage.innerHTML = strContent;
+
+        //計算分頁數量的方法
+        countPageNum(zoneList.length);
 
         //Detail的DOM必須要放在updateContent裡面，才能重新抓取不同的li
         var li = document.querySelectorAll('.li');     
