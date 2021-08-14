@@ -53,7 +53,9 @@ xhr.onload = function(){
     var selectAreaTitle = document.querySelector('#selectArea');
     var contentMessage = document.querySelector('#content');
     var detailMessage = document.querySelector('#detailMessage');
-    var pagination = document.querySelector('#pagination');
+    var previousButton = document.querySelector('#previousButton');
+    var numButton = document.querySelector('#numButton');
+    var nextButton = document.querySelector('#nextButton');
     var placeButton = document.querySelectorAll('.placeButton');
 
     // 預設當前頁為第一頁
@@ -183,43 +185,53 @@ xhr.onload = function(){
 
     //換頁方法
     function changePage(e){
-        if(e.target.textContent == 'Next >') {
-            if(pageNum == pageLeng) { 
-                pageNum = pageLeng //頁面到最後一頁時候 pageNum = pageLeng
-            }else{
-                pageNum ++; //尚未到最後頁面則按下 NEXT 進到下一頁
-            }
-        }else if(e.target.textContent == '< Previous') {
-            if(pageNum == 1) {
-                pageNum = 1; //頁面到第一頁時候 pageNum = 1
-            }else{
-                pageNum --; //尚未到第一頁則按下 Previous 進到前一頁
-            }
-        }else {
-            pageNum = parseInt(e.target.textContent);
-        }       
-        updateContent();
+        pageNum = parseInt(e.target.textContent);   
+        updateContent(selectValue);
+    }
+
+    function previous(){
+        if(pageNum == 1) {
+            pageNum = 1; //頁面到第一頁時候 pageNum = 1
+        }else{
+            pageNum --; //尚未到第一頁則按下 Previous 進到前一頁
+        }
+        updateContent(selectValue);
+    }
+
+    function next(){
+        if(pageNum == pageLeng) { 
+            pageNum = pageLeng //頁面到最後一頁時候 pageNum = pageLeng
+        }else{
+            pageNum ++; //尚未到最後頁面則按下 NEXT 進到下一頁
+        }
+        updateContent(selectValue);
       }
-      pagination.addEventListener('click', changePage,false);
+
+      previousButton.addEventListener('click',previous,false);
+      numButton.addEventListener('click',changePage,false);
+      nextButton.addEventListener('click',next,false);
 
     //生成頁面按鈕的方法
     function countPageNum(num) {
         if(num > CONTENT_NUM) {
-          pageLeng = Math.ceil( num / CONTENT_NUM );
-          var prevPage = '<li><a>< Previous</a></li>';
-          var nextPage ='<li><a>Next ></a></li>';
-          var page = '';
-          for(var i = 1; i<= pageLeng; i++) {
-            if(i == pageNum) {
-            page += '<li><a class="active">'+i+'</a></li>';
-            } else {
-                page += '<li><a>'+i+'</a></li>';
+            pageLeng = Math.ceil( num / CONTENT_NUM );
+            var prevPage = '<button value = "Previous">Previous</button>';
+            var nextPage ='<button value = "Next">Next</button>';
+            var page = '';
+            for(var i = 1; i<= pageLeng; i++) {
+                if(i == pageNum) {
+                    page += '<button value = "'+i+'">'+i+'</button>';
+                } else {
+                    page += '<button value = "'+i+'">'+i+'</button>';
+                }
             }
-          } 
-           pagination.innerHTML = prevPage + page + nextPage;
+            previousButton.innerHTML =  prevPage;
+            numButton.innerHTML = page;
+            nextButton.innerHTML = nextPage;
+
         } else {
-            page = '<li><a class="active">1</a></li>';
-             pagination.innerHTML = page ;
+            page = '<button value = "1"><a class="active">1</a></button>';
+            numButton.innerHTML = page ;
         }
     }
 }

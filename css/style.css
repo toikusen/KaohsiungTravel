@@ -196,29 +196,29 @@ body {
     color: black;
 }
 
-.paginationPage {
+.pagination {
     clear: both;
     text-align: center;
     margin-bottom: 50px;
 }
 
-.paginationPage li{
+.pagination button{
     font-size: 30px;
     display: inline;
 }
 
-.paginationPage li a{
+.pagination button a{
     color: black;
     padding: 8px 20px;
     text-decoration: none;
 }
 
-.paginationPage li a.active {
+.pagination button a.active {
     background-color: rgb(0, 155, 175);
     color: white;
     }
     
-.paginationPage li a:hover:not(.active) { background-color: #ddd; }
+.pagination button a:hover:not(.active) { background-color: #ddd; }
 
 footer{
     background-color: rgb(0, 155, 175);
