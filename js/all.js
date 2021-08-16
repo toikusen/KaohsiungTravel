@@ -184,7 +184,7 @@ xhr.onload = function(){
     }
 
     //換頁方法
-    function changePage(e){
+    function numChange(e){
         pageNum = parseInt(e.target.textContent);   
         updateContent(selectValue);
     }
@@ -208,21 +208,21 @@ xhr.onload = function(){
       }
 
       previousButton.addEventListener('click',previous,false);
-      numButton.addEventListener('click',changePage,false);
+      numButton.addEventListener('click',numChange,false);
       nextButton.addEventListener('click',next,false);
 
     //生成頁面按鈕的方法
     function countPageNum(num) {
         if(num > CONTENT_NUM) {
             pageLeng = Math.ceil( num / CONTENT_NUM );
-            var prevPage = '<button value = "Previous">Previous</button>';
-            var nextPage ='<button value = "Next">Next</button>';
+            var prevPage = '<button value = "Previous"><a>Previous</a></button>';
+            var nextPage ='<button value = "Next"><a>Next</a></button>';
             var page = '';
             for(var i = 1; i<= pageLeng; i++) {
                 if(i == pageNum) {
-                    page += '<button value = "'+i+'">'+i+'</button>';
+                    page += '<button value = "'+i+'"><a class="active">'+i+'</a></button>';
                 } else {
-                    page += '<button value = "'+i+'">'+i+'</button>';
+                    page += '<button value = "'+i+'"><a>'+i+'</a></button>';
                 }
             }
             previousButton.innerHTML =  prevPage;

@@ -204,12 +204,14 @@ body {
 
 .pagination button{
     font-size: 30px;
-    display: inline;
+    background-color: white;
+    border: none;
+    text-decoration: none;
 }
 
 .pagination button a{
     color: black;
-    padding: 8px 20px;
+    padding: 4px 20px;
     text-decoration: none;
 }
 
@@ -219,6 +221,20 @@ body {
     }
     
 .pagination button a:hover:not(.active) { background-color: #ddd; }
+
+.pagination .previousButton{
+    display: inline-block;
+}
+
+
+.pagination .numButton{
+    display: inline-block;
+}
+
+
+.pagination .nextButton{
+    display: inline-block;
+}
 
 footer{
     background-color: rgb(0, 155, 175);
