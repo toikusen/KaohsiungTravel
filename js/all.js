@@ -3,18 +3,18 @@ var xhr = new XMLHttpRequest();
 xhr.open('get','https://api.kcg.gov.tw/api/service/get/9c8e1450-e833-499c-8320-29b36b7ace5c');
 xhr.send(null);
 xhr.onload = function(){
-    var Data = JSON.parse(xhr.responseText);
+    var api = JSON.parse(xhr.responseText);
 
     //將json資料整理成較好看的形式方便之後使用
-    var Info = Data.data.XML_Head.Infos.Info;
-    var dataLen = Info.length;
+    var info = api.data.XML_Head.Infos.Info;
+    var dataLen = info.length;
 
     var placeMap = new Map();
     var zipcodeList = new Array();
     var AddList = new Array();
 
     for(var i = 0; i < dataLen; i++){
-        var allInfo = Info[i]; //去遍歷原本資料中的每一項
+        var allInfo = info[i]; //去遍歷原本資料中的每一項
         var zipcode = allInfo.Zipcode;
         var zipcodeIndex = placeMap.get(zipcode);//取得zipcode對應的索引值
         if(zipcodeIndex == null){ //如果沒有這個zipcode，則生成一個新的陣列來存放zipcode跟data
@@ -41,6 +41,7 @@ xhr.onload = function(){
         
     }
 
+    //生成zoneMap來對應zipcode
     var zoneMap = new Map();
     for(var i = 0; i<zoneList.length; i++){
         zoneMap.set(zoneList[i],zipcodeList[i])    
@@ -93,7 +94,7 @@ xhr.onload = function(){
     //下拉選單更改地區名稱
     var selectValue = '';
     function updateArea(e){
-        pageNum = 1; // 改地區之後要回到第一頁
+        pageNum = 1; // 改地區之後要回到第一頁，也正因為改地區會整個把內容重改，而像換頁只會改內容，所以要跟改內容分開做
         selectValue =  e;       
         strArea = '<h2>'+selectValue+'</h2>';
         selectAreaTitle.innerHTML = strArea;
@@ -155,15 +156,15 @@ xhr.onload = function(){
                 document.getElementById("detail").style.top = (scrollTop + top) + "px"; 
                 document.getElementById("detail").style.left = (scrollLeft + left) + "px"; 
                 var selectName = e.srcElement.innerHTML;          
-                if (selectName == Info[x].Name){  
+                if (selectName == info[x].Name){  
                     strDetail = 
                     '\
-                    <h1>'+Info[x].Name+'</h1>\
+                    <h1>'+info[x].Name+'</h1>\
                     <hr>\
                     <br>\
                     <h2>景點介紹：</h2>\
                     <br>\
-                    <p>'+Info[x].Toldescribe+'</p>\
+                    <p>'+info[x].Toldescribe+'</p>\
                     ';
                     $("#detail").show();     
                 }
