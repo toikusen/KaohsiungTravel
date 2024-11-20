@@ -4,9 +4,9 @@ xhr.open('get','https://api.kcg.gov.tw/api/service/get/9c8e1450-e833-499c-8320-2
 xhr.send(null);
 xhr.onload = function(){
     var api = JSON.parse(xhr.responseText);
-
+    console.log(api)
     //將json資料整理成較好看的形式方便之後使用
-    var info = api.data.XML_Head.Infos.Info;
+    var info = api.data.AttractionList.Attractions.Attraction;
     var dataLen = info.length;
 
     var placeMap = new Map();
@@ -15,14 +15,14 @@ xhr.onload = function(){
 
     for(var i = 0; i < dataLen; i++){
         var allInfo = info[i]; //去遍歷原本資料中的每一項
-        var zipcode = allInfo.Zipcode;
+        var zipcode = allInfo.PostalAddress.ZipCode;
         var zipcodeIndex = placeMap.get(zipcode);//取得zipcode對應的索引值
         if(zipcodeIndex == null){ //如果沒有這個zipcode，則生成一個新的陣列來存放zipcode跟data
             placeData =new Array();
             placeData.push(allInfo);
             placeMap.set(zipcode,placeData);
             zipcodeList.push(zipcode);
-            AddList.push(allInfo.Add);//在產生單一筆不重複資料時就將這筆Add取出用來找名稱
+            AddList.push(allInfo.PostalAddress.Town);//在產生單一筆不重複資料時就將這筆Add取出用來找名稱
         
         }else{ //如果取得的zipcode已經存在了，那就在該位置產生對應的資料
             zipcodeIndex.push(allInfo);
@@ -43,8 +43,8 @@ xhr.onload = function(){
 
     //生成zoneMap來對應zipcode
     var zoneMap = new Map();
-    for(var i = 0; i<zoneList.length; i++){
-        zoneMap.set(zoneList[i],zipcodeList[i])    
+    for(var i = 0; i<AddList.length; i++){
+        zoneMap.set(AddList[i],zipcodeList[i])    
     }
 
 
@@ -74,7 +74,7 @@ xhr.onload = function(){
         //areaOption.value = area[i];
         // areaOption.textContent = area[i];
         // selectDropDownList.appendChild(areaOption);
-        strAreaList += '<option value="'+zoneList[i]+'">'+zoneList[i]+'</optiion>';
+        strAreaList += '<option value="'+AddList[i]+'">'+AddList[i]+'</optiion>';
     }
     selectDropDownList.innerHTML = defaultSelect + strAreaList;
 
@@ -126,14 +126,13 @@ xhr.onload = function(){
             '<div class="attractions">\
                 <ul>\
                     <li class="li">\
-                        <div class="picture" style="background:url('+arrayPlace[n].Picture1+')">\
-                            <h3>'+arrayPlace[n].Name+'</h3>\
+                        <div class="picture" style="background:url('+arrayPlace[n].Images+')">\
+                            <h3>'+arrayPlace[n].AttractionName+'</h3>\
                             <h2>'+selectValue+'</h2>\
                             </div><div class="info">\
-                            <p><img src="./picture/icons_clock.png" alt=""> '+arrayPlace[n].Opentime+'</p>\
-                            <p><img src="./picture/icons_pin.png" alt=""> '+arrayPlace[n].Add+'</p>\
-                            <p><img src="./picture/icons_phone.png" alt=""> '+arrayPlace[n].Tel+'</p>\
-                            <p><img src="./picture/icons_tag.png" alt=""> '+arrayPlace[n].Ticketinfo+'</p>\
+                            <p><img src="./picture/icons_pin.png" alt=""> '+arrayPlace[n].PostalAddress.StreetAddress+'</p>\
+                            <p><img src="./picture/icons_phone.png" alt=""> '+arrayPlace[n].Telephones.Telephone.Tel+'</p>\
+                            <p><img src="./picture/icons_tag.png" alt=""></p>\
                         </div>\
                     </li>\
                 </ul>\
@@ -156,16 +155,20 @@ xhr.onload = function(){
                 document.getElementById("detail").style.top = (scrollTop + top) + "px"; 
                 document.getElementById("detail").style.left = (scrollLeft + left) + "px"; 
                 var selectName = e.srcElement.innerHTML;          
-                if (selectName == info[x].Name){  
+                if (selectName == info[x].AttractionName){  
                     strDetail = 
                     '\
-                    <h1>'+info[x].Name+'</h1>\
+                    <h1>'+info[x].AttractionName+'</h1>\
                     <hr>\
                     <br>\
                     <h2>景點介紹：</h2>\
                     <br>\
-                    <p>'+info[x].Toldescribe+'</p>\
+                    <p>'+info[x].Description+'</p>\
                     ';
+                    // 動態設置寬度和高度
+                    var detailElement = document.getElementById("detail");
+                    detailElement.style.height = "500px"; // 設定框的高度
+                    detailElement.style.overflow = "auto"; // 超出範圍顯示滾動條
                     $("#detail").show();     
                 }
             }
